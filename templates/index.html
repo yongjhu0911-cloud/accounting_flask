@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記帳系統</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>我的記帳系統</h1>
+        <p>首頁已成功載入。</p>
+
+        <h2>新增記帳資料</h2>
+        <form action="{{ url_for('add') }}" method="post">
+            <label>日期：</label>
+            <input type="date" name="date" required><br><br>
+
+            <label>類型：</label>
+            <select name="type" required>
+                <option value="收入">收入</option>
+                <option value="支出">支出</option>
+            </select><br><br>
+
+            <label>類別：</label>
+            <input type="text" name="category" placeholder="例如：飲食" required><br><br>
+
+            <label>金額：</label>
+            <input type="number" name="amount" placeholder="請輸入金額" required><br><br>
+
+            <label>備註：</label>
+            <input type="text" name="note" placeholder="備註內容"><br><br>
+
+            <button type="submit">新增</button>
+        </form>
+
+        <hr>
+
+        <h2>月份篩選</h2>
+        <form method="get" action="{{ url_for('index') }}">
+            <label>月份：</label>
+            <input type="month" name="month" value="{{ month }}">
+            <button type="submit">篩選</button>
+            <a href="{{ url_for('index') }}">清除篩選</a>
+        </form>
+
+        <hr>
+
+       <h2>統計</h2>
+
+<h3>全部資料統計</h3>
+<p>總收入：{{ all_income }}</p>
+<p>總支出：{{ all_expense }}</p>
+<p>結餘：{{ all_balance }}</p>
+
+{% if month %}
+    <h3>{{ month }} 統計</h3>
+    <p>當月收入：{{ month_income }}</p>
+    <p>當月支出：{{ month_expense }}</p>
+    <p>當月結餘：{{ month_balance }}</p>
+{% endif %}
+
+
+        <hr>
+
+        <h2>記帳紀錄</h2>
+        {% if records %}
+            <table>
+                <tr>
+                    <th>日期</th>
+                    <th>類型</th>
+                    <th>類別</th>
+                    <th>金額</th>
+                    <th>備註</th>
+                    <th>操作</th>
+                </tr>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.type }}</td>
+                    <td>{{ record.category }}</td>
+                    <td>{{ record.amount }}</td>
+                    <td>{{ record.note }}</td>
+                    <td>
+                        <a href="{{ url_for('edit', record_id=record.id) }}">編輯</a>
+                        <a href="{{ url_for('delete', record_id=record.id) }}" onclick="return confirm('確定要刪除嗎？')">刪除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>目前沒有記錄。</p>
+        {% endif %}
+
+        <hr>
+
+        <h2>圖表區</h2>
+        <p>這裡之後可以放每月收支圖、分類圓餅圖。</p>
+    </div>
+</body>
+</html>

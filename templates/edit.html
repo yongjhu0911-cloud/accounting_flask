@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編輯資料</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>編輯記帳資料</h1>
+
+        <form method="post">
+            <label>日期：</label>
+            <input type="date" name="date" value="{{ record.date }}" required><br><br>
+
+            <label>類型：</label>
+            <select name="type" required>
+                <option value="收入" {% if record.type == "收入" %}selected{% endif %}>收入</option>
+                <option value="支出" {% if record.type == "支出" %}selected{% endif %}>支出</option>
+            </select><br><br>
+
+            <label>類別：</label>
+            <input type="text" name="category" value="{{ record.category }}" required><br><br>
+
+            <label>金額：</label>
+            <input type="number" name="amount" value="{{ record.amount }}" required><br><br>
+
+            <label>備註：</label>
+            <input type="text" name="note" value="{{ record.note }}"><br><br>
+
+            <button type="submit">儲存修改</button>
+        </form>
+
+        <p><a href="{{ url_for('index') }}">返回首頁</a></p>
+    </div>
+</body>
+</html>
